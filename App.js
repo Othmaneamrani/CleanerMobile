@@ -1,8 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
 
 export default function App() {
   return (
