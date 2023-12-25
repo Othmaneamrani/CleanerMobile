@@ -1,41 +1,36 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
+import First from './Components/First';
 
 export default function App() {
   return (
-    <View >
-      <Navbar />
     <View style={styles.container}>
+      <Navbar />
 
-    <TouchableOpacity style={styles.bouton}>
-      <Text style={styles.texteBouton}>Appuyez-moi</Text>
-    </TouchableOpacity> 
+      <View style={styles.content}>
+        <First />
+      </View>
 
+      <Footer style={styles.footer} />
     <StatusBar style="auto" />
-    </View>
-    <Footer />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex :1,
   },
-  bouton: {
-    backgroundColor: '#3498db', 
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5, 
+  content: {
+    backgroundColor: 'rgb(245, 245, 245)',
+    flex :1,
     alignItems: 'center',
-    marginTop: 10,
+    justifyContent :'center',
   },
-  texteBouton: {
-    fontSize: 16,
-  }
+  footer: {
+
+  },
 });

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet , Platform} from 'react-native';
 
 export default function Navbar () {
     return (
@@ -14,7 +14,6 @@ export default function Navbar () {
 const styles = StyleSheet.create({
     container : {
         paddingTop : 30,
-        justifyContent: 'flex-start',
         flexDirection: 'column',
         alignItems: 'center',
         padding: 10,
@@ -25,15 +24,21 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
-    line : {
+    line: {
         width: '100%',
         height: 1,
         backgroundColor: 'black',
-        marginTop: 5,
-        shadowColor: "black",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        elevation: 5, 
-    }
+        marginTop: 4,
+        ...Platform.select({
+          android: {
+            elevation: 20,
+          },
+          ios: {
+            shadowColor: 'black',
+            shadowOffset: { width: 0, height: 5 },
+            shadowOpacity: 0.5,
+            shadowRadius: 5,
+          },
+        }),
+      },
 });
