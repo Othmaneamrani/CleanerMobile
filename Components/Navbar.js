@@ -2,17 +2,21 @@ import { View, Text, StyleSheet , Platform} from 'react-native';
 
 export default function Navbar () {
     return (
+      <View>
         <View style={styles.container}>
             <Text style={styles.text}>
                 CleanDom
             </Text >
-            <View style={styles.line}></View>
         </View>
+        <View style={styles.line}></View>
+      </View>
+
     );
 }
 
 const styles = StyleSheet.create({
     container : {
+        backgroundColor: 'rgb(245, 245, 245)',
         paddingTop : 30,
         flexDirection: 'column',
         alignItems: 'center',
@@ -28,10 +32,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 1,
         backgroundColor: 'black',
-        marginTop: 4,
+        marginTop: 5,
         ...Platform.select({
           android: {
-            elevation: 20,
+            elevation: 10,
           },
           ios: {
             shadowColor: 'black',

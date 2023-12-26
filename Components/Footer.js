@@ -1,22 +1,22 @@
-import { StyleSheet, Text ,View } from "react-native";
+import { StyleSheet, View ,Text} from "react-native";
 
-export default function () {
+export default function Footer () {
     return (
-        <View style={styles.container}>
+        <View>
+            <View style={styles.container}>
 
-            <View style={styles.line}></View>
-            
-            <View style={styles.textContainer}>
-                <Text style={styles.red}> Supprimer </Text >
-                <Text style={styles.text}> Autre </Text >
-                <Text style={styles.green}> Favoris </Text >
+                <View style={styles.line}></View>
+
+        <View style={styles.textContainer}>
+            <Text style={{fontWeight: 'bold',}}>Ceci est un Footer</Text>
+        </View>
             </View>
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: 'rgb(245, 245, 245)',
         padding: 10,
         paddingTop : 0,
         width: '100%',
@@ -27,21 +27,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
       },
     textContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: 'column',
+        alignItems: 'center',
         marginTop: 10,
         width: "100%",
     }, 
-    text: {
-        marginHorizontal: 10, 
-    },
-    red: {
-        marginHorizontal: 10, 
-        color: "red",
-    },
-    green: {
-        marginHorizontal: 10,
-        color: "green",
-    },
-  });
-  
+})
