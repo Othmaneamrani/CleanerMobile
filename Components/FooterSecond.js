@@ -2,26 +2,27 @@ import { StyleSheet ,View,Image } from "react-native";
 import iconDelete from '../assets/iconDelete.png';
 import iconHeart from '../assets/iconHeart.png';
 import iconChange from '../assets/iconChange.png';
+import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
 
 export default function FooterSecond() {
+
     return (
-        <View style={styles.container}>
+        <GestureHandlerRootView  style={styles.container} >
 
             <View style={styles.line}></View>
             
             <View style={styles.textContainer}>
-                <Image style={styles.icon} source={iconDelete} ></Image >
-                <Image style={styles.icon} source={iconChange} ></Image >
-                <Image style={styles.icon} source={iconHeart} ></Image >
+                <TouchableOpacity style={styles.icon}><Image style={styles.image} source={iconDelete} ></Image ></TouchableOpacity>
+                <TouchableOpacity style={styles.icon}><Image style={styles.image} source={iconChange} ></Image ></TouchableOpacity>
+                <TouchableOpacity style={styles.icon}><Image style={styles.image} source={iconHeart} ></Image ></TouchableOpacity> 
             </View>
-        </View>
+         </GestureHandlerRootView> 
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         padding: 10,
-        paddingTop : 0,
         width: '100%',
     },
     line: {
@@ -36,10 +37,13 @@ const styles = StyleSheet.create({
         width: "100%",
     }, 
     icon: {
-        width: 25, 
-        height: 25, 
+        alignItems: 'center',
+        justifyContent: 'center',
         marginHorizontal: 10,
     },
-
+    image : {
+        width: 30, 
+        height: 30, 
+    },
   });
   

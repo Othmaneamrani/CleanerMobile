@@ -1,13 +1,17 @@
 import { StyleSheet, TouchableOpacity,Text, View, ImageBackground } from "react-native";
 import Footer from "./Footer";
+import { useNavigation } from "@react-navigation/native";
 
 export default function First () {
+
+  const navigation = useNavigation();
+
     return (
       <View style={styles.containerAll}>
       <ImageBackground  source={require('../assets/theme.jpg')}
       style={styles.background} >
         <View style={styles.container}>
-            <TouchableOpacity style={styles.bouton}>
+            <TouchableOpacity    onPress={() => { navigation.navigate('Second') }}  style={styles.bouton}>
                  <Text style={styles.texteBouton}>Start !</Text>
             </TouchableOpacity> 
         </View>
