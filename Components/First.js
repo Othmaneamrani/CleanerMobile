@@ -1,6 +1,7 @@
 import { StyleSheet, TouchableOpacity,Text, View, ImageBackground } from "react-native";
 import Footer from "./Footer";
 import { useNavigation } from "@react-navigation/native";
+import Navbar from "./Navbar";
 
 export default function First () {
 
@@ -8,6 +9,7 @@ export default function First () {
 
     return (
       <View style={styles.containerAll}>
+          <Navbar />
       <ImageBackground  source={require('../assets/theme.jpg')}
       style={styles.background} >
         <View style={styles.container}>

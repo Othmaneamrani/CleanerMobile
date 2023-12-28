@@ -2,6 +2,10 @@ import { StyleSheet ,View,Image } from "react-native";
 import iconDelete from '../assets/iconDelete.png';
 import iconHeart from '../assets/iconHeart.png';
 import iconChange from '../assets/iconChange.png';
+import arrowLeft from '../assets/arrowLeft.png';
+import arrowRight from '../assets/arrowRight.png';
+
+
 import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
 
 export default function FooterSecond() {
@@ -12,9 +16,17 @@ export default function FooterSecond() {
             <View style={styles.line}></View>
             
             <View style={styles.textContainer}>
-                <TouchableOpacity style={styles.icon}><Image style={styles.image} source={iconDelete} ></Image ></TouchableOpacity>
-                <TouchableOpacity style={styles.icon}><Image style={styles.image} source={iconChange} ></Image ></TouchableOpacity>
-                <TouchableOpacity style={styles.icon}><Image style={styles.image} source={iconHeart} ></Image ></TouchableOpacity> 
+                <TouchableOpacity style={styles.icon}>
+                    <Image style={styles.image} source={iconDelete} ></Image >
+                    <Image style={styles.arrow} source={arrowLeft} ></Image > 
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.icon}>
+                    <Image style={styles.image} source={iconChange} ></Image >
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.icon}>
+                    <Image style={styles.image} source={iconHeart} ></Image > 
+                    <Image style={styles.arrow} source={arrowRight} ></Image > 
+                </TouchableOpacity> 
             </View>
          </GestureHandlerRootView> 
     )
@@ -22,7 +34,8 @@ export default function FooterSecond() {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
         width: '100%',
     },
     line: {
@@ -42,8 +55,12 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     image : {
-        width: 30, 
-        height: 30, 
+        width: 40, 
+        height: 40, 
+    },
+    arrow : {
+        width: 20, 
+        height: 20, 
     },
   });
   

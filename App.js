@@ -1,7 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import Navbar from './Components/Navbar';
 import First from './Components/First';
 import Second from './Components/Second';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -17,8 +16,6 @@ export default function App() {
     <NavigationContainer>
 
       <View style={styles.container}>
-
-        <Navbar />
 
         <Stack.Navigator initialRouteName="First" >
 
