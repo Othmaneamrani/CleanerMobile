@@ -15,7 +15,7 @@ export default function Second () {
             quality: 1,
           });
     
-          if (!result.cancelled) {
+          if (!result.canceled) {
             if (result.assets && result.assets.length > 0) {
                 setImageSource({ uri: result.assets[0].uri });
               }          }
