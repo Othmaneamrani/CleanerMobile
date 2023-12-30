@@ -8,7 +8,7 @@ import arrowRight from '../assets/arrowRight.png';
 
 import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
 
-export default function FooterSecond() {
+export default function FooterSecond({updateGalleryImages }) {
 
     return (
         <GestureHandlerRootView  style={styles.container} >
@@ -20,7 +20,7 @@ export default function FooterSecond() {
                     <Image style={styles.image} source={iconDelete} ></Image >
                     <Image style={styles.arrow} source={arrowLeft} ></Image > 
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.icon}>
+                <TouchableOpacity style={styles.icon} onPress={ () => updateGalleryImages () } >
                     <Image style={styles.image} source={iconChange} ></Image >
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.icon}>
