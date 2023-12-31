@@ -1,17 +1,26 @@
-import { StyleSheet, Image, View } from "react-native";
+import { StyleSheet, Image,Text, View } from "react-native";
 import FooterSecond from "./FooterSecond";
 import NavbarSecond from "./NavbarSecond";
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState, useEffect } from 'react';
+import * as MediaLibrary from 'expo-media-library';
 
 export default function Second() {
-  const [imageSource, setImageSource] = useState(null);
+  const [imageSource, setImageSource] = useState();
   const [galleryImages, setGalleryImages] = useState([]);
+  const [finImage, setFinImage] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    requestGalleryPermission();
-    fetchGalleryImages();
+    initializeGallery();
   }, []);
+
+  const initializeGallery = async () => {
+    await requestGalleryPermission();
+    await fetchGalleryImages();
+    setIsLoading(false);
+    updateGalleryImages();
+  };
 
   const requestGalleryPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -21,30 +30,43 @@ export default function Second() {
   };
 
   const fetchGalleryImages = async () => {
+    let photos = [];
     try {
-      const result = await ImagePicker.getMediaLibraryAsync ({
-        mediaType: ImagePicker.MediaTypeOptions.Images,
-      });
+      const albums = await MediaLibrary.getAlbumsAsync();
+      const allPhotosAlbum = albums.find(album => album.title === "sql");
 
-      if (result?.assets && result.assets.length > 0) {
-        const randomIndex = Math.floor(Math.random() * result.assets.length);
-        const randomImage = result.assets[randomIndex];
-        if (randomImage) {
-          setImageSource({ uri: randomImage.uri });
-          setGalleryImages(prevImages => prevImages.filter(img => img !== randomImage));
-        }
+      if (allPhotosAlbum) {
+        photos = await MediaLibrary.getAssetsAsync({
+          album: allPhotosAlbum,
+          mediaType: MediaLibrary.MediaType.Image ,
+          first: 1000000,
+        });
+    
+      if (photos.assets.length > 0) {
+        setGalleryImages(photos.assets);
+        updateGalleryImages();
+      } else {
+        console.log("No images found in the album.");
+      }
+      } else {
+        console.log("L'album n'a pas été trouvé.");
       }
     } catch (error) {
-      console.error('Error fetching gallery images', error);
+      console.error(error);
     }
   };
 
   const updateGalleryImages  = () => {
-    if (galleryImages.length > 0) {
+    if (galleryImages.length > 0 ) {
+      setFinImage(false);
       const randomIndex = Math.floor(Math.random() * galleryImages.length);
       const randomImage = galleryImages[randomIndex];
-      setImageSource({ uri: randomImage.uri });
+      setImageSource(randomImage);
       setGalleryImages(prevImages => prevImages.filter(img => img !== randomImage));
+      console.log(galleryImages.length);
+      // console.log(imageSource);
+    }else {
+      setFinImage(true);
     }
   };
 
@@ -53,6 +75,8 @@ export default function Second() {
       <NavbarSecond />
       <View style={styles.content}>
         {imageSource && <Image source={imageSource} style={{ flex: 1, width: '100%', resizeMode: 'contain' }} />}
+        {finImage && <Text style={{fontWeight: 'bold'}} >No images available anymore. </Text>}
+        {isLoading && <Text>Loading...</Text>}
       </View>
       <FooterSecond updateGalleryImages ={updateGalleryImages } />
     </View>
