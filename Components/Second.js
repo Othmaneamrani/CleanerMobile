@@ -1,4 +1,4 @@
-import { StyleSheet, Image,Text, View } from "react-native";
+import { StyleSheet, Image,Text, View, RefreshControl } from "react-native";
 import FooterSecond from "./FooterSecond";
 import NavbarSecond from "./NavbarSecond";
 import * as ImagePicker from 'expo-image-picker';
@@ -18,8 +18,8 @@ export default function Second() {
   const initializeGallery = async () => {
     await requestGalleryPermission();
     await fetchGalleryImages();
+    await updateGalleryImages();
     setIsLoading(false);
-    updateGalleryImages();
   };
 
   const requestGalleryPermission = async () => {
@@ -30,41 +30,40 @@ export default function Second() {
   };
 
   const fetchGalleryImages = async () => {
-    let photos = [];
     try {
       const albums = await MediaLibrary.getAlbumsAsync();
-      const allPhotosAlbum = albums.find(album => album.title === "sql");
+      const allImages = [];
 
-      if (allPhotosAlbum) {
-        photos = await MediaLibrary.getAssetsAsync({
-          album: allPhotosAlbum,
-          mediaType: MediaLibrary.MediaType.Image ,
-          first: 1000000,
+      for (const album of albums) {
+        const photos = await MediaLibrary.getAssetsAsync({
+          mediaType: MediaLibrary.MediaType.Image,
+          first: 2,
+          album: album,
         });
     
-      if (photos.assets.length > 0) {
-        setGalleryImages(photos.assets);
-        updateGalleryImages();
-      } else {
-        console.log("No images found in the album.");
+if (photos.assets.length > 0) {
+        allImages.push(...photos.assets);
       }
-      } else {
-        console.log("L'album n'a pas été trouvé.");
-      }
-    } catch (error) {
-      console.error(error);
     }
-  };
+
+    if (allImages.length > 0) {
+      setGalleryImages(allImages);
+      updateGalleryImages();
+    } else {
+      console.log("No images found.");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const updateGalleryImages  = () => {
-    if (galleryImages.length > 0 ) {
+    if (galleryImages.length > 0 ) {   // kayji l false d had condition
       setFinImage(false);
       const randomIndex = Math.floor(Math.random() * galleryImages.length);
       const randomImage = galleryImages[randomIndex];
       setImageSource(randomImage);
       setGalleryImages(prevImages => prevImages.filter(img => img !== randomImage));
-      console.log(galleryImages.length);
-      // console.log(imageSource);
     }else {
       setFinImage(true);
     }

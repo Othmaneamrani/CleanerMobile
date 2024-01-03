@@ -14,7 +14,10 @@ export default function First () {
       style={styles.background} >
         <View style={styles.container}>
             <TouchableOpacity    onPress={() => { navigation.navigate('Second') }}  style={styles.bouton}>
-                 <Text style={styles.texteBouton}>Start !</Text>
+                 <Text style={styles.texteBouton}>Clean images !</Text>
+            </TouchableOpacity> 
+            <TouchableOpacity    onPress={() => { navigation.navigate('Second') }}  style={styles.bouton}>
+                 <Text style={styles.texteBouton}>Clean videos ! </Text>
             </TouchableOpacity> 
         </View>
       </ImageBackground>
