@@ -15,6 +15,7 @@ export default function Images() {
   useEffect(() => {
     const initializeGallery = async () => {
       await requestGalleryPermission();
+      await requestDeletePermission();
       await fetchGalleryImages();
       if (galleryImages.length === 0) {
         await updateGalleryImages();
@@ -32,6 +33,14 @@ export default function Images() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       console.error('Permission to access gallery was denied');
+    }
+  };
+
+
+  const requestDeletePermission = async () => {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    if (status !== 'granted') {
+      console.error('Permission to delete images was denied');
     }
   };
 
@@ -55,7 +64,7 @@ if (photos.assets.length > 0) {
       setGalleryImages(allImages);
       updateGalleryImages();
     } else {
-      console.log("No images found.");
+      console.log("No images found.");  
     }
   } catch (error) {
     console.error(error);
@@ -75,6 +84,21 @@ if (photos.assets.length > 0) {
     }
   };
 
+
+  const deleteImage = async ()  => {
+    if(imageSource){
+      try{
+            await MediaLibrary.deleteAssetsAsync([imageSource]);
+            console.log('Image deleted successfully');
+            setGalleryImages((prevImages) => prevImages.filter((img) => img.id !== imageSource.id));
+            updateGalleryImages();
+      }catch(err){
+        console.error("erreuur : " + err);
+      }
+    }
+
+  }
+
   return (
     <View style={styles.container}>
       <NavbarSecond />
@@ -83,7 +107,7 @@ if (photos.assets.length > 0) {
         {finImage && <Text style={{fontWeight: 'bold'}} >No images available anymore. </Text>}
         {isLoading && <Text>Loading...</Text>}
       </View>
-      <FooterSecond updateGallery ={updateGalleryImages } />
+      <FooterSecond updateGallery ={updateGalleryImages}  deleteImage={deleteImage} />
     </View>
   );
 }
