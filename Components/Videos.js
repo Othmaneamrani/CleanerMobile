@@ -16,15 +16,21 @@ export default function Videos() {
 
   useEffect(() => {
     const initializeGallery = async () => {
-      await requestGalleryPermission();
-      await requestDeletePermission();
-      await fetchGalleryVideos();
-      if (galleryVideos.length === 0) {
-        await updateGalleryVideos();
-        setCpt(cpt+1);
-      }
-      if(galleryVideos.length > 0) {
-        setIsLoading(false);
+      try {
+        await requestGalleryPermission();
+        await requestDeletePermission();
+        await fetchGalleryVideos();
+    
+        if (galleryVideos.length === 0) {
+          await updateGalleryVideos();
+          setCpt((prevCpt) => prevCpt + 1);
+        }
+    
+        if (galleryVideos.length > 0) {
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error('Error during initialization:', error);
       }
     };
     initializeGallery();
@@ -89,12 +95,10 @@ if (Videos.assets.length > 0) {
   const deleteVideo = async ()  => {
     if(videoSource){
       try{
-            await MediaLibrary.deleteAssetsAsync([videoSource.id]);
-            console.log('Video deleted successfully');
-            setGalleryVideos((prevVideo) => prevVideo.filter((vid) => vid.id !== videoSource.id));
+            await MediaLibrary.deleteAssetsAsync([videoSource]);
             updateGalleryVideos();
       }catch(err){
-        console.error("erreuur : " + err);
+        console.error("errrreuur : " + err);
       }
     }
   }

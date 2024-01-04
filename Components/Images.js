@@ -15,15 +15,21 @@ export default function Images() {
 
   useEffect(() => {
     const initializeGallery = async () => {
-      await requestGalleryPermission();
-      await requestDeletePermission();
-      await fetchGalleryImages();
-      if (galleryImages.length === 0) {
-        await updateGalleryImages();
-        setCpt(cpt+1);
-      }
-      if(galleryImages.length > 0) {
-        setIsLoading(false);
+      try {
+        await requestGalleryPermission();
+        await requestDeletePermission();
+        await fetchGalleryImages();
+    
+        if (galleryImages.length === 0) {
+          await updateGalleryImages();
+          setCpt((prevCpt) => prevCpt + 1);
+        }
+    
+        if (galleryImages.length > 0) {
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error('Error during initialization:', error);
       }
     };
     initializeGallery();
@@ -43,7 +49,8 @@ export default function Images() {
     if (status !== 'granted') {
       console.error('Permission to delete images was denied');
     }
-  };
+  };  
+  
 
 
   const fetchGalleryImages = async () => {
@@ -87,25 +94,21 @@ if (photos.assets.length > 0) {
   };
 
 
-  const deleteImage = async ()  => {
-    if(imageSource){
-      try{
-            await MediaLibrary.deleteAssetsAsync([imageSource.id]);
-            const localUri = imageSource.uri;
-            const cheminRelatif = 'Pictures/Gallery/owner/test/IMG_20240104_211413.jpg';
-            const cheminComplet = `${FileSystem.documentDirectory}${cheminRelatif}`;
-            console.log(cheminComplet);
-            // await FileSystem.deleteAsync(localUri, { idempotent: true });
-            await FileSystem.deleteAsync(cheminComplet, { idempotent: true });
-            console.log('Image deleted successfully');
-            setGalleryImages((prevImages) => prevImages.filter((img) => img.id !== imageSource.id));
-            updateGalleryImages();
-      }catch(err){
-        console.error("erreuur : " + err);
+  const deleteImage = async () => {
+    if (imageSource) {
+      try {
+        await MediaLibrary.deleteAssetsAsync([imageSource]);
+        const localUri = imageSource.uri;
+        const cheminComplet = localUri.replace("file://", "");
+        await FileSystem.deleteAsync(cheminComplet, { idempotent: true });
+        updateGalleryImages();
+
+      } catch (err) {
+        console.error("errrreuur : " + err);
       }
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <NavbarSecond />
