@@ -8,7 +8,7 @@ export default function Footer () {
                 <View style={styles.line}></View>
 
         <View style={styles.textContainer}>
-            <Text style={{fontWeight: 'bold',}}>This is a Footer</Text>
+            <Text style={{fontWeight: 'bold',}}>By Hotman Armani</Text>
         </View>
             </View>
         </View>

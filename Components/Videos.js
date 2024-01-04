@@ -17,6 +17,7 @@ export default function Videos() {
   useEffect(() => {
     const initializeGallery = async () => {
       await requestGalleryPermission();
+      await requestDeletePermission();
       await fetchGalleryVideos();
       if (galleryVideos.length === 0) {
         await updateGalleryVideos();
@@ -33,6 +34,13 @@ export default function Videos() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       console.error('Permission to access gallery was denied');
+    }
+  };
+
+  const requestDeletePermission = async () => {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    if (status !== 'granted') {
+      console.error('Permission to delete images was denied');
     }
   };
 
@@ -77,6 +85,20 @@ if (Videos.assets.length > 0) {
     }
   };
 
+
+  const deleteVideo = async ()  => {
+    if(videoSource){
+      try{
+            await MediaLibrary.deleteAssetsAsync([videoSource.id]);
+            console.log('Video deleted successfully');
+            setGalleryVideos((prevVideo) => prevVideo.filter((vid) => vid.id !== videoSource.id));
+            updateGalleryVideos();
+      }catch(err){
+        console.error("erreuur : " + err);
+      }
+    }
+  }
+
   return (
     <View style={styles.container}>
       <NavbarSecond />
@@ -92,7 +114,7 @@ if (Videos.assets.length > 0) {
         {finVideo && <Text style={{fontWeight: 'bold'}} >No videos available anymore. </Text>}
         {isLoading && <Text>Loading...</Text>}
       </View>
-      <FooterSecond updateGallery ={updateGalleryVideos } />
+      <FooterSecond updateGallery ={updateGalleryVideos} deleteMedia={deleteVideo} />
     </View>
   );
 }

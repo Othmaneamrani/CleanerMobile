@@ -4,6 +4,7 @@ import NavbarSecond from "./NavbarSecond";
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState, useEffect } from 'react';
 import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system';
 
 export default function Images() {
   const [imageSource, setImageSource] = useState();
@@ -43,6 +44,7 @@ export default function Images() {
       console.error('Permission to delete images was denied');
     }
   };
+
 
   const fetchGalleryImages = async () => {
     try {
@@ -88,7 +90,13 @@ if (photos.assets.length > 0) {
   const deleteImage = async ()  => {
     if(imageSource){
       try{
-            await MediaLibrary.deleteAssetsAsync([imageSource]);
+            await MediaLibrary.deleteAssetsAsync([imageSource.id]);
+            const localUri = imageSource.uri;
+            const cheminRelatif = 'Pictures/Gallery/owner/test/IMG_20240104_211413.jpg';
+            const cheminComplet = `${FileSystem.documentDirectory}${cheminRelatif}`;
+            console.log(cheminComplet);
+            // await FileSystem.deleteAsync(localUri, { idempotent: true });
+            await FileSystem.deleteAsync(cheminComplet, { idempotent: true });
             console.log('Image deleted successfully');
             setGalleryImages((prevImages) => prevImages.filter((img) => img.id !== imageSource.id));
             updateGalleryImages();
@@ -96,8 +104,7 @@ if (photos.assets.length > 0) {
         console.error("erreuur : " + err);
       }
     }
-
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -107,7 +114,7 @@ if (photos.assets.length > 0) {
         {finImage && <Text style={{fontWeight: 'bold'}} >No images available anymore. </Text>}
         {isLoading && <Text>Loading...</Text>}
       </View>
-      <FooterSecond updateGallery ={updateGalleryImages}  deleteImage={deleteImage} />
+      <FooterSecond updateGallery ={updateGalleryImages}  deleteMedia={deleteImage} />
     </View>
   );
 }
