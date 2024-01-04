@@ -13,10 +13,10 @@ export default function First () {
       <ImageBackground  source={require('../assets/theme.jpg')}
       style={styles.background} >
         <View style={styles.container}>
-            <TouchableOpacity    onPress={() => { navigation.navigate('Second') }}  style={styles.bouton}>
+            <TouchableOpacity    onPress={() => { navigation.navigate('Images') }}  style={styles.bouton}>
                  <Text style={styles.texteBouton}>Clean images !</Text>
             </TouchableOpacity> 
-            <TouchableOpacity    onPress={() => { navigation.navigate('Second') }}  style={styles.bouton}>
+            <TouchableOpacity    onPress={() => { navigation.navigate('Videos') }}  style={styles.bouton}>
                  <Text style={styles.texteBouton}>Clean videos ! </Text>
             </TouchableOpacity> 
         </View>

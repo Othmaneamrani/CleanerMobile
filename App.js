@@ -2,9 +2,10 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import First from './Components/First';
-import Second from './Components/Second';
+import Images from './Components/Images';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+import Videos from './Components/Videos';
 
 export default function App() {
 
@@ -20,7 +21,9 @@ export default function App() {
         <Stack.Navigator initialRouteName="First" >
 
           <Stack.Screen name='First' component={First} options={{headerShown:false}}/> 
-          <Stack.Screen name='Second' component={Second} options={{headerShown:false}}/>
+          <Stack.Screen name='Images' component={Images} options={{headerShown:false}}/>
+          <Stack.Screen name='Videos' component={Videos} options={{headerShown:false}}/>
+
 
         </Stack.Navigator>
 
