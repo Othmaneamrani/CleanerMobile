@@ -4,7 +4,8 @@ import NavbarSecond from "./NavbarSecond";
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState, useEffect } from 'react';
 import * as MediaLibrary from 'expo-media-library';
-import * as FileSystem from 'expo-file-system';
+import { Linking } from 'react-native';
+
 
 export default function Images() {
   const [imageSource, setImageSource] = useState();
@@ -50,8 +51,7 @@ export default function Images() {
       console.error('Permission to delete images was denied');
     }
   };  
-  
-
+    
 
   const fetchGalleryImages = async () => {
     try {
@@ -94,20 +94,17 @@ if (photos.assets.length > 0) {
   };
 
 
-  const deleteImage = async () => {
-    if (imageSource) {
-      try {
-        await MediaLibrary.deleteAssetsAsync([imageSource]);
-        const localUri = imageSource.uri;
-        const cheminComplet = localUri.replace("file://", "");
-        await FileSystem.deleteAsync(cheminComplet, { idempotent: true });
-        updateGalleryImages();
+      const deleteImage = async () => {
+        if (imageSource) {
+        try {
+          await Linking.openURL(imageSource.uri);
+          updateGalleryImages();
 
-      } catch (err) {
-        console.error("errrreuur : " + err);
+        } catch (error) {
+          console.error(`Erreur lors de l'ouverture de l'URL : ${error.message}`);
+        }
       }
-    }
-  };
+      };
   
   return (
     <View style={styles.container}>
@@ -132,3 +129,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+
+    // exemple de uri : file:///storage/emulated/0/Pictures/Gallery/owner/compilation /IMG-20230513-WA0011.jpg
