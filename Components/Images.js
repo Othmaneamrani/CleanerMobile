@@ -4,7 +4,8 @@ import NavbarSecond from "./NavbarSecond";
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState, useEffect } from 'react';
 import * as MediaLibrary from 'expo-media-library';
-import { Linking } from 'react-native';
+import * as Linking from 'expo-linking';
+import * as FileSystem from 'expo-file-system';
 
 
 export default function Images() {
@@ -94,18 +95,30 @@ if (photos.assets.length > 0) {
   };
 
 
-      const deleteImage = async () => {
-        if (imageSource) {
-        try {
-          await Linking.openURL(imageSource.uri);
-          updateGalleryImages();
+  const deleteImage = async () => {
+    if (imageSource) {
+      try {
+        const { uri } = imageSource;
+      
+        // Copier le fichier dans le répertoire d'écriture de l'application
+        const destinationUri = `${FileSystem.documentDirectory}deleted_image.jpg`;
+        await FileSystem.copyAsync({ from: uri, to: destinationUri });
+        
+        // Ouvrir l'URL du fichier copié
+        const scopedUri = await FileSystem.getContentUriAsync(destinationUri);
+        await Linking.openURL(scopedUri);
+        console.log(scopedUri);
+        console.log(uri);
 
-        } catch (error) {
-          console.error(`Erreur lors de l'ouverture de l'URL : ${error.message}`);
-        }
+        // Mettre à jour la liste des images
+        updateGalleryImages();
+      } catch (error) {
+        console.error(`Erreur lors de l'ouverture de l'URL : ${error.message}`);
       }
-      };
+    }
+  };
   
+
   return (
     <View style={styles.container}>
       <NavbarSecond />
