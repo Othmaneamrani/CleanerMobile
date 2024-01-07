@@ -12,7 +12,7 @@ export default function NavbarSecond() {
         <TouchableOpacity  onPress={() => { navigation.navigate('First') }} >
           <Text style={styles.bouton}>Home</Text>
         </TouchableOpacity>
-        <Text style={styles.text}>CleanDom</Text>
+        <Text style={styles.text}>Random Cleaner</Text>
         <View />
       </View>
       <View style={styles.line}></View>

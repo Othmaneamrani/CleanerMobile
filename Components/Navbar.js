@@ -5,7 +5,7 @@ export default function Navbar () {
       <View>
         <View style={styles.container}>
             <Text style={styles.text}>
-                CleanDom
+                Random Cleaner
             </Text >
         </View>
         <View style={styles.line}></View>

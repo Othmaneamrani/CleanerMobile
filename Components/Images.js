@@ -4,8 +4,9 @@ import NavbarSecond from "./NavbarSecond";
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState, useEffect } from 'react';
 import * as MediaLibrary from 'expo-media-library';
-import * as Linking from 'expo-linking';
 import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+
 
 
 export default function Images() {
@@ -19,7 +20,6 @@ export default function Images() {
     const initializeGallery = async () => {
       try {
         await requestGalleryPermission();
-        await requestDeletePermission();
         await fetchGalleryImages();
     
         if (galleryImages.length === 0) {
@@ -46,12 +46,6 @@ export default function Images() {
   };
 
 
-  const requestDeletePermission = async () => {
-    const { status } = await MediaLibrary.requestPermissionsAsync();
-    if (status !== 'granted') {
-      console.error('Permission to delete images was denied');
-    }
-  };  
     
 
   const fetchGalleryImages = async () => {
@@ -95,28 +89,48 @@ if (photos.assets.length > 0) {
   };
 
 
-  const deleteImage = async () => {
-    if (imageSource) {
-      try {
-        const { uri } = imageSource;
-      
-        // Copier le fichier dans le répertoire d'écriture de l'application
-        const destinationUri = `${FileSystem.documentDirectory}deleted_image.jpg`;
-        await FileSystem.copyAsync({ from: uri, to: destinationUri });
-        
-        // Ouvrir l'URL du fichier copié
-        const scopedUri = await FileSystem.getContentUriAsync(destinationUri);
-        await Linking.openURL(scopedUri);
-        console.log(scopedUri);
-        console.log(uri);
 
-        // Mettre à jour la liste des images
-        updateGalleryImages();
-      } catch (error) {
-        console.error(`Erreur lors de l'ouverture de l'URL : ${error.message}`);
-      }
+  const ShareImage = async () => {
+    try {
+      const asset = await MediaLibrary.getAssetInfoAsync(imageSource);
+  
+      const cacheDirectory = FileSystem.cacheDirectory + 'image.jpg';
+      await FileSystem.copyAsync({ from: asset.uri, to: cacheDirectory });
+  
+      await Sharing.shareAsync(`file://${cacheDirectory}`);
+    } catch (error) {
+      console.error(`Erreur lors de l'ouverture de l'URL : ${error.message}`);
     }
   };
+
+
+  const deleteImage = async () => {
+    try {
+      const asset = await MediaLibrary.getAssetInfoAsync(imageSource);
+  
+      // Vérifiez d'abord si l'autorisation de suppression est accordée
+      const deletePermission = await MediaLibrary.requestPermissionsAsync();
+      if (deletePermission.granted) {
+        // Obtenez le chemin du fichier à partir de l'URI
+        const filePath = FileSystem.cacheDirectory + asset.filename;
+  
+        // Supprimez le fichier du système de fichiers
+        await FileSystem.deleteAsync(filePath, { idempotent: true });
+  
+        // Supprimez l'élément de la galerie
+        await MediaLibrary.deleteAssetsAsync([asset.id]);
+  
+        // Mettez à jour la galerie d'images après la suppression
+        updateGalleryImages();
+      } else {
+        console.error('Permission to delete image was denied');
+      }
+    } catch (error) {
+      console.error(`Erreur lors de la suppression de l'image : ${error.message}`);
+    }
+  };
+  
+
   
 
   return (
@@ -127,7 +141,7 @@ if (photos.assets.length > 0) {
         {finImage && <Text style={{fontWeight: 'bold'}} >No images available anymore. </Text>}
         {isLoading && <Text>Loading...</Text>}
       </View>
-      <FooterSecond updateGallery ={updateGalleryImages}  deleteMedia={deleteImage} />
+      <FooterSecond updateGallery ={updateGalleryImages}  ShareMedia={ShareImage} deleteMedia={deleteImage} />
     </View>
   );
 }

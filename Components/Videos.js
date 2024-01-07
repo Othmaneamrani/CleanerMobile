@@ -5,6 +5,9 @@ import * as ImagePicker from 'expo-image-picker';
 import React, { useState, useEffect } from 'react';
 import * as MediaLibrary from 'expo-media-library';
 import { Video } from 'expo-av';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+
 
 
 export default function Videos() {
@@ -101,7 +104,22 @@ if (Videos.assets.length > 0) {
         console.error("errrreuur : " + err);
       }
     }
-  }
+  };
+
+
+
+  const ShareVideo = async () => {
+    try {
+      const asset = await MediaLibrary.getAssetInfoAsync(videoSource);
+  
+      const cacheDirectory = FileSystem.cacheDirectory + 'video.mp4';
+      await FileSystem.copyAsync({ from: asset.uri, to: cacheDirectory });
+  
+      await Sharing.shareAsync(`file://${cacheDirectory}`);
+    } catch (error) {
+      console.error(`Erreur lors de l'ouverture de l'URL : ${error.message}`);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -118,7 +136,7 @@ if (Videos.assets.length > 0) {
         {finVideo && <Text style={{fontWeight: 'bold'}} >No videos available anymore. </Text>}
         {isLoading && <Text>Loading...</Text>}
       </View>
-      <FooterSecond updateGallery ={updateGalleryVideos} deleteMedia={deleteVideo} />
+      <FooterSecond updateGallery ={updateGalleryVideos} ShareMedia={ShareVideo}  deleteMedia={deleteVideo} />
     </View>
   );
 }

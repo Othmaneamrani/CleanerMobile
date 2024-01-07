@@ -1,6 +1,6 @@
 import { StyleSheet ,View,Image } from "react-native";
 import iconDelete from '../assets/iconDelete.png';
-import iconHeart from '../assets/iconHeart.png';
+import iconShare from '../assets/iconShare.png';
 import iconChange from '../assets/iconChange.png';
 import arrowLeft from '../assets/arrowLeft.png';
 import arrowRight from '../assets/arrowRight.png';
@@ -8,7 +8,7 @@ import arrowRight from '../assets/arrowRight.png';
 
 import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
 
-export default function FooterSecond({updateGallery , deleteMedia}) {
+export default function FooterSecond({updateGallery , deleteMedia , ShareMedia}) {
 
     return (
         <GestureHandlerRootView  style={styles.container} >
@@ -23,8 +23,8 @@ export default function FooterSecond({updateGallery , deleteMedia}) {
                 <TouchableOpacity style={styles.icon} onPress={ () => updateGallery() } >
                     <Image style={styles.image} source={iconChange} ></Image >
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.icon}>
-                    <Image style={styles.image} source={iconHeart} ></Image > 
+                <TouchableOpacity style={styles.icon}  onPress={ () => ShareMedia() } >
+                    <Image style={styles.image} source={iconShare} ></Image > 
                     <Image style={styles.arrow} source={arrowRight} ></Image > 
                 </TouchableOpacity> 
             </View>
